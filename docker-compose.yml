@@ -1,0 +1,30 @@
+services:
+  db:
+    image: postgres:16
+    container_name: beebit_db
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: beebit
+      POSTGRES_PASSWORD: beebit
+      POSTGRES_DB: beebit_db
+    volumes:
+      - beebit_pg_data:/var/lib/postgresql/data
+  backend:
+    build: ./backend
+    container_name: beebit_backend
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+    environment:
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+      DATABASE_USER: beebit
+      DATABASE_PASSWORD: beebit
+      DATABASE_NAME: beebit_db
+    volumes:
+      - ./backend/src:/app/src
+
+volumes:
+  beebit_pg_data:
