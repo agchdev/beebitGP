@@ -1,9 +1,10 @@
 import { IsString, IsNotEmpty, IsUrl, IsInt } from 'class-validator';
+import { Task } from 'src/tasks/entities/task.entity/task.entity';
 
 export class CreateFileDto {
   @IsInt({ message: 'El ID de la tarea debe ser un número entero.' })
   @IsNotEmpty({ message: 'El ID de la tarea es obligatorio.' })
-  task: number;
+  task: Task;
 
   @IsString()
   @IsNotEmpty({ message: 'El nombre del archivo es obligatorio.' })

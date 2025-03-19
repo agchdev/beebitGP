@@ -1,9 +1,10 @@
 import { IsInt, IsString, IsNotEmpty } from 'class-validator';
+import { Project } from 'src/projects/entities/project.entity/project.entity';
 
 export class CreateInvitationDto {
   @IsInt()
   @IsNotEmpty()
-  project: number;
+  project: Project;
 
   @IsInt()
   @IsNotEmpty()

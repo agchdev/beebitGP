@@ -1,9 +1,10 @@
 import { IsString, IsOptional, IsUrl, IsInt } from 'class-validator';
+import { Task } from 'src/tasks/entities/task.entity/task.entity';
 
 export class UpdateFileDto {
   @IsOptional()
   @IsInt({ message: 'El ID de la tarea debe ser un número entero.' })
-  task?: number;
+  task?: Task;
 
   @IsOptional()
   @IsString()
