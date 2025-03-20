@@ -14,6 +14,7 @@ import { Project } from './entities/project.entity/project.entity';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ProjectResponseDto } from './dto/project-response.dto';
 
 @ApiTags('projects')
 @Controller('projects')
@@ -59,7 +60,7 @@ export class ProjectsController {
     // Actualizar proyecto
     @Put(':id')
     @ApiOperation({ summary: 'Actualizar un proyecto' })
-    @ApiResponse({ status: 200, description: 'Proyecto actualizado correctamente', type: Project })
+    @ApiResponse({ status: 200, description: 'Proyecto actualizado correctamente', type: ProjectResponseDto })
     @ApiResponse({ status: 404, description: 'Proyecto no encontrado' })
     async updateProject(@Param('id') id: number, @Body() updateProjectDto: UpdateProjectDto) {
         const updatedProject = await this.projectsService.update(id, updateProjectDto);

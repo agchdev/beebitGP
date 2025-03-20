@@ -1,8 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, Param, Post, Put } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { Comment } from './entities/comment.entity/comment.entity';
 import { CreateCommentkDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { CommentResponseDto } from './dto/comment-response.dto';
 
 @Controller('comments')
 export class CommentsController {
@@ -14,8 +16,15 @@ export class CommentsController {
   }
 
   @Get(':id')
-  async getComment(@Param('id') id: number): Promise<Comment | null> {
-    return this.commentsService.findOne(id);
+  @ApiOperation({ summary: 'Obtener un comentario por ID' })
+  @ApiResponse({ status: 200, description: 'Comentario encontrado', type: CommentResponseDto })
+  @ApiResponse({ status: 404, description: 'Comentario no encontrado' })
+  async getComment(@Param('id') id: number) {
+      const comment = await this.commentsService.findOne(id);
+      if (!comment) {
+          throw new HttpException({ status: 404, message: 'Comentario no encontrado' }, 404);
+      }
+      return { status: 200, data: comment };
   }
 
   @Post()

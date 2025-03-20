@@ -1,6 +1,8 @@
-import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete, HttpException } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { Task } from './entities/task.entity/task.entity';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { TaskResponseDto } from './dto/task-response.dto';
 
 @Controller('tasks')
 export class TasksController {
@@ -14,8 +16,15 @@ export class TasksController {
 
   // Obtener una tarea por ID
   @Get(':id')
-  async getTask(@Param('id') id: number): Promise<Task | null> {
-    return this.tasksService.findOne(id);
+  @ApiOperation({ summary: 'Obtener una tarea por ID' })
+  @ApiResponse({ status: 200, description: 'Tarea encontrada', type: TaskResponseDto })
+  @ApiResponse({ status: 404, description: 'Tarea no encontrada' })
+  async getTask(@Param('id') id: number) {
+      const task = await this.tasksService.findOne(id);
+      if (!task) {
+          throw new HttpException({ status: 404, message: 'Tarea no encontrada' }, 404);
+      }
+      return { status: 200, data: task };
   }
   // Crear una nueva tarea
   @Post()
