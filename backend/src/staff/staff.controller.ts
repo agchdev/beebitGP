@@ -2,9 +2,9 @@ import { Controller, Get, Post, Body, Param, Put, Delete, HttpException, HttpSta
 import { StaffService } from './staff.service';
 import { Staff } from './entities/staff.entity/staff.entity';
 import { CreateStaffDto } from './dto/ create-staff.dto';
-import { UpdateProjectDto } from 'src/projects/dto/update-project.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { StaffResponseDto } from './dto/staff-response.dto';
+import { UpdateStaffDto } from './dto/update-staff.dto';
 
 @Controller('staff')
 export class StaffController {
@@ -73,7 +73,7 @@ export class StaffController {
         rol: staff.rol,
       }
 
-      return { status: HttpStatus.OK, data: staffResponseDto };
+      return { status: HttpStatus.CREATED, data: staffResponseDto };
     } catch (error) {
       throw new HttpException({ status: HttpStatus.BAD_REQUEST, message: 'Error al crear el proyecto' }, HttpStatus.BAD_REQUEST);
     }
@@ -86,7 +86,7 @@ export class StaffController {
   @ApiResponse({ status: 404, description: 'Miembro del staff no encontrado' })
   async updateStaff(
     @Param('id') id: number,
-    @Body() updateStaffDto: UpdateProjectDto
+    @Body() updateStaffDto: UpdateStaffDto
   ): Promise<{ status: number; data: Staff }> {
     const updatedStaff = await this.staffService.update(id, updateStaffDto);
     if (!updatedStaff) {
