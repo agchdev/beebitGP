@@ -25,6 +25,15 @@ services:
       DATABASE_NAME: beebit_db
     volumes:
       - ./backend/src:/app/src
+  frontend:
+    build: ./frontend
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
 
 volumes:
   beebit_pg_data:
