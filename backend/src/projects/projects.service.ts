@@ -33,7 +33,10 @@ export class ProjectsService {
     }
 
     // Eliminar un proyecto por ID
-    async remove(id: number): Promise<void> {
-        await this.projectRepository.delete(id);
+    async remove(id: number): Promise<Project | null> {
+        const project = await this.projectRepository.findOne({ where: { id } });
+        if (!project) return null;
+        await this.projectRepository.remove(project);
+        return project;
     }
 }
