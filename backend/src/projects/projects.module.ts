@@ -5,9 +5,9 @@ import { ProjectsService } from './projects.service';
 import { ProjectsController } from './projects.controller';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Project])], // Importar TypeORM y la entidad
+  imports: [TypeOrmModule.forFeature([Project])], // Importa TypeORM con la entidad Project
   providers: [ProjectsService],
   controllers: [ProjectsController],
-  //exports: [ProjectsService], // Exportar si otros módulos lo necesitan
+  exports: [ProjectsService, TypeOrmModule.forFeature([Project])], // Exporta también TypeORM
 })
 export class ProjectsModule {}

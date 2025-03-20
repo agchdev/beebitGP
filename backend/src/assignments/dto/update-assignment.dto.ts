@@ -7,12 +7,12 @@ export class UpdateAssignmentDto {
   @ApiProperty({ example: 1, description: 'ID del proyecto' })
   @IsOptional()
   @IsObject({ message: 'El ID del staff debe ser un número entero.' })
-  projectId?: Project;
+  projectId?: number;
 
   @ApiProperty({ example: 1, description: 'ID del staff' })
   @IsOptional()
   @IsObject({ message: 'El ID del staff debe ser un número entero.' })
-  staffId?: Staff;
+  staffId?: number;
 
   @ApiProperty({ example: '2022-01-01', description: 'Fecha de asignación' })
   @IsOptional()

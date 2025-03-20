@@ -8,6 +8,7 @@ import { Project } from 'src/projects/entities/project.entity/project.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Task, Project])],
   controllers: [TasksController],
-  providers: [TasksService]
+  providers: [TasksService],
+  exports: [TasksService, TypeOrmModule], // Exporta para que otros módulos puedan usarlo
 })
 export class TasksModule {}

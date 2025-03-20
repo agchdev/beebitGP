@@ -1,11 +1,12 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsString, IsOptional, IsDateString, IsInt } from "class-validator";
+import { ProjectResponseDto } from "src/projects/dto/project-response.dto";
 
 export class UpdateTaskDto {
     @ApiProperty({ example: 1, description: 'ID del proyecto' })
     @IsOptional()
     @IsInt({ message: 'El ID del proyecto debe ser un número entero.' })
-    proyecto?: number
+    proyecto?: ProjectResponseDto
 
     @ApiProperty({ example: 'Tarea 1', description: 'TitledBorder de la tarea' })
     @IsOptional()

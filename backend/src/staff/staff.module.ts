@@ -5,8 +5,9 @@ import { StaffController } from './staff.controller';
 import { StaffService } from './staff.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Staff])], // Registro de la entidad en TypeORM
+  imports: [TypeOrmModule.forFeature([Staff])], // Asegura que se importe correctamente
+  providers: [StaffService],
   controllers: [StaffController],
-  providers: [StaffService]
+  exports: [StaffService, TypeOrmModule.forFeature([Staff])] // Exportar para que otros módulos puedan usarlo
 })
 export class StaffModule {}
