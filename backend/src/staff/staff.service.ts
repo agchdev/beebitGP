@@ -33,7 +33,10 @@ export class StaffService {
   }
 
   // Eliminar un miembro del staff por ID
-  async remove(id: number): Promise<void> {
+  async remove(id: number): Promise<Staff | null> {
+    const staff = await this.staffRepository.findOne({ where: { id } });
+    if (!staff) return null;
     await this.staffRepository.delete(id);
+    return staff;
   }
 }

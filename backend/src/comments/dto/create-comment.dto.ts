@@ -1,19 +1,24 @@
+import { ApiProperty } from "@nestjs/swagger";
 import { IsDateString, IsInt, IsNotEmpty, IsString } from "class-validator";
 
 export class CreateCommentkDto {
     
+    @ApiProperty({ example: 1, description: 'ID del proyecto' })
     @IsInt({ message: 'El ID del proyecto debe ser un número entero.' })
     @IsNotEmpty({ message: 'El ID del proyecto es obligatorio.' })
     projectId: number
     
+    @ApiProperty({ example: 1, description: 'ID del staff' })
     @IsInt({ message: 'El ID del staff debe ser un número entero.' })
     @IsNotEmpty({ message: 'El ID del staff es obligatorio.' })
     staffId: number
     
+    @ApiProperty({ example: 1, description: 'ID de la tarea' })
     @IsString()
     @IsNotEmpty({ message: 'El contenido es obligatorio.' })
     content: string
 
+    @ApiProperty({ example: '2022-01-01', description: 'Fecha de creación' })
     @IsDateString({}, { message: 'La fecha de creación debe tener un formato válido.' })
     @IsNotEmpty({ message: 'La fecha de creación es obligatoria.' })
     fecha_creacion: Date
