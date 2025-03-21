@@ -38,8 +38,31 @@ export class StaffController {
   @ApiOperation({ summary: 'Obtener un miembro del staff por ID' })
   @ApiResponse({ status: 200, description: 'Miembro del staff encontrado', type: StaffResponseDto })
   @ApiResponse({ status: 404, description: 'Miembro del staff no encontrado' })
-  async getStaff(@Param('id') id: number): Promise<{ status: number; data: StaffResponseDto }> {
-    const staff = await this.staffService.findOne(id);
+  async getStaff(@Param('id') id: string): Promise<{ status: HttpStatus; data: StaffResponseDto }> {
+    const numericId = parseInt(id, 10); // 🔹 Convertimos el string a número
+  
+    if (isNaN(numericId)) {
+      throw new HttpException({ status: HttpStatus.BAD_REQUEST, message: 'El ID debe ser un número válido' }, 400);
+    }
+  
+    const staff = await this.staffService.findOne(numericId);
+  
+    if (!staff) {
+      throw new HttpException({ status: HttpStatus.NOT_FOUND, message: 'Miembro del staff no encontrado' }, 404);
+    }
+  
+    return { status: HttpStatus.OK, data: staff };
+  }
+
+  // Buscar por usuario y contraseña
+  @Post('login')
+  @ApiOperation({ summary: 'Buscar por usuario y contraseña' })
+  @ApiResponse({ status: 200, description: 'Miembro del staff encontrado', type: StaffResponseDto })
+  @ApiResponse({status: 404, description: 'Miembro del staff no encontrado'})
+  async login(
+    @Body() loginDto: { user: string; password: string },
+  ): Promise<{status: HttpStatus, data: StaffResponseDto}>{
+    const staff = await this.staffService.validateUser(loginDto.user, loginDto.password);
 
     if (!staff) {
       throw new HttpException({ status: HttpStatus.NOT_FOUND, message: 'Miembro del staff no encontrado' }, 404);
@@ -87,7 +110,7 @@ export class StaffController {
   async updateStaff(
     @Param('id') id: number,
     @Body() updateStaffDto: UpdateStaffDto
-  ): Promise<{ status: number; data: Staff }> {
+  ): Promise<{ status: number; data: StaffResponseDto }> {
     const updatedStaff = await this.staffService.update(id, updateStaffDto);
     if (!updatedStaff) {
       throw new HttpException({ status: HttpStatus.OK, message: 'Miembro del staff no encontrado' }, 404);

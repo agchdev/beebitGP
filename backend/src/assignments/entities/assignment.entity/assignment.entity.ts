@@ -8,12 +8,12 @@ export class Assignment {
   id: number;
 
   @ManyToOne(() => Project, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'project_id' })  // Definir la clave foránea en la base de datos
-  projectId: Project;
-
+  @JoinColumn({ name: 'project_id' }) 
+  project: Project;  
+  
   @ManyToOne(() => Staff, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'staff_id' })  // Definir la clave foránea en la base de datos
-  staffId: Staff;
+  @JoinColumn({ name: 'staff_id' }) 
+  staff: Staff;  
 
   @Column({ type: 'timestamp' })
   fecha_asignacion: Date;

@@ -11,6 +11,9 @@ export class Staff {
   @Column({ type: 'varchar', length: 255, unique: true })
   email: string;
 
+  @Column({ type: 'varchar', length: 255, nullable: false })
+  password: string;
+
   @Column({ type: 'varchar', length: 50 })
   rol: string;
 }

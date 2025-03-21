@@ -6,7 +6,11 @@ async function bootstrap() {
   console.log('🔥 Iniciando NestJS...');
 
   const app = await NestFactory.create(AppModule);
-  app.enableCors();
+  app.enableCors({
+    origin: '*', // Permite todas las conexiones (puedes restringirlo más tarde)
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: 'Content-Type, Authorization',
+  });
   console.log('Servidor NestJS levantado');
 
   // Configuración de Swagger

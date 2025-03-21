@@ -23,31 +23,53 @@ export class AssignmentsService {
 
   // Obtener todas las asignaciones
   async findAll(): Promise<AssignmentResponseDto[]> {
-    const assignments = await this.assignmentRepository.find({ relations: ['projectId', 'staffId'] });
+    const assignments = await this.assignmentRepository.find({ relations: ['project', 'staff'] });
     
     return assignments.map(assignment => ({
       id: assignment.id,
-      projectId: assignment.projectId.id,
-      staffId: assignment.staffId.id,
+      project: assignment.project,
+      staff: assignment.staff,
+      fecha_asignacion: assignment.fecha_asignacion,
+    }));
+    
+  }
+
+  // Obtener todas las asignaciones de un miembro del staff
+  async findAllByUserId(staffId: number): Promise<AssignmentResponseDto[]> {
+    const assignments = await this.assignmentRepository.find({
+      where: { staff: { id: staffId } },
+      relations: ['project', 'staff'],  // ✅ Solo necesitas la relación con `project`
+    });
+  
+    return assignments.map(assignment => ({
+      id: assignment.id,
+      project: assignment.project, 
+      staff: assignment.staff,
       fecha_asignacion: assignment.fecha_asignacion,
     }));
   }
+  
+
 
   // Obtener una asignación por ID
   async findOne(id: number): Promise<AssignmentResponseDto | null> {
-    const assignment = await this.assignmentRepository.findOne({ where: { id }, relations: ['projectId', 'staffId'] });
-    
+    const assignment = await this.assignmentRepository.findOne({ 
+      where: { id }, 
+      relations: ['project', 'staff'],  // ✅ Incluye ambas relaciones 
+    });
+  
     if (!assignment) {
       throw new NotFoundException(`Asignación con ID ${id} no encontrada`);
     }
-
+  
     return {
       id: assignment.id,
-      projectId: assignment.projectId.id,
-      staffId: assignment.staffId.id,
+      project: assignment.project, // ✅ Devuelve el objeto completo del proyecto
+      staff: assignment.staff, // ✅ Devuelve el objeto completo del staff
       fecha_asignacion: assignment.fecha_asignacion,
     };
   }
+  
 
   // Crear una nueva asignación
   async create(createAssignmentDto: CreateAssignmentDto): Promise<AssignmentResponseDto> {
@@ -62,8 +84,8 @@ export class AssignmentsService {
     }
 
     const newAssignment = this.assignmentRepository.create({
-      projectId: project,
-      staffId: staff,
+      project: project,
+      staff: staff,
       fecha_asignacion: createAssignmentDto.fecha_asignacion,
     });
 
@@ -71,8 +93,8 @@ export class AssignmentsService {
 
     return {
       id: savedAssignment.id,
-      projectId: savedAssignment.projectId.id,
-      staffId: savedAssignment.staffId.id,
+      project: savedAssignment.project,
+      staff: savedAssignment.staff,
       fecha_asignacion: savedAssignment.fecha_asignacion,
     };
   }
@@ -90,7 +112,7 @@ export class AssignmentsService {
       if (!project) {
         throw new NotFoundException(`El proyecto con ID ${updateAssignmentDto.projectId} no existe.`);
       }
-      assignment.projectId = project;
+      assignment.project = project;
     }
 
     if (updateAssignmentDto.staffId) {
@@ -98,7 +120,7 @@ export class AssignmentsService {
       if (!staff) {
         throw new NotFoundException(`El miembro del staff con ID ${updateAssignmentDto.staffId} no existe.`);
       }
-      assignment.staffId = staff;
+      assignment.staff = staff;
     }
 
     if (updateAssignmentDto.fecha_asignacion) {
@@ -109,8 +131,8 @@ export class AssignmentsService {
 
     return {
       id: assignment.id,
-      projectId: assignment.projectId.id,
-      staffId: assignment.staffId.id,
+      project: assignment.project,
+      staff: assignment.staff,
       fecha_asignacion: assignment.fecha_asignacion,
     };
   }

@@ -15,8 +15,10 @@ export class AssignmentsController {
   @ApiOperation({ summary: 'Obtener todas las asignaciones' })
   @ApiResponse({ status: 200, description: 'OK', type: [AssignmentResponseDto] })
   @ApiResponse({ status: 404, description: 'No se encontraron miembros del staff' })
-  async getAllAssignments(): Promise<{ status: number; data: AssignmentResponseDto[] }> {
+  async getAllAssignments(): Promise<{ status: HttpStatus; data: AssignmentResponseDto[] }> {
     const assignments = await this.assignmentsService.findAll();
+
+    console.log("assignments", assignments)
 
     // Manejo de error si no hay miembros en la base de datos
     if (!assignments.length) {
@@ -26,8 +28,43 @@ export class AssignmentsController {
     // Mapear la lista de `Assignment` a `AssignmentResponseDto[]`
     const assignmentsResponse: AssignmentResponseDto[] = assignments.map(assignment => ({
       id: assignment.id,
-      projectId: assignment.projectId,
-      staffId: assignment.staffId,
+      project: assignment.project,
+      staff: assignment.staff,
+      fecha_asignacion: assignment.fecha_asignacion
+    }))
+
+    return { status: HttpStatus.OK, data: assignmentsResponse };
+  }
+
+  // Obtener asignaciones por ID de usuario
+  @Get('/user/:id')
+  @ApiOperation({ summary: 'Obtener asignaciones por ID de usuario' })
+  @ApiResponse({ status: 200, description: 'OK', type: [AssignmentResponseDto] })
+  @ApiResponse({ status: 404, description: 'No se encontraron miembros del staff' })
+  async getAssignmentsByUserId(@Param('id') id: string): Promise<{ status: HttpStatus; data: AssignmentResponseDto[] }> {
+    const userId = parseInt(id, 10); // <-- Convertimos a número
+
+    if (isNaN(userId)) {
+      throw new HttpException({ status: HttpStatus.BAD_REQUEST, message: 'ID inválido' }, HttpStatus.BAD_REQUEST);
+    }
+
+    const assignments = await this.assignmentsService.findAllByUserId(userId);
+    console.log("Asignaciones encontradas:", assignments); // ✅ Verifica la salida
+
+    if (!assignments || assignments.length === 0) { // ⬅️ Asegurar que es un array
+      throw new HttpException({ status: HttpStatus.NOT_FOUND, message: 'No se encontraron miembros del staff' }, HttpStatus.NOT_FOUND);
+    }
+
+    // Manejo de error si no hay miembros en la base de datos
+    if (!assignments.length) {
+      throw new HttpException({ status: HttpStatus.NOT_FOUND, message: 'No se encontraron miembros del staff' }, HttpStatus.NOT_FOUND);
+    } 
+
+    // Mapear la lista de `Assignment` a `AssignmentResponseDto[]`
+    const assignmentsResponse: AssignmentResponseDto[] = assignments.map(assignment => ({
+      id: assignment.id,
+      project: assignment.project,
+      staff: assignment.staff,
       fecha_asignacion: assignment.fecha_asignacion
     }))
 
@@ -50,8 +87,8 @@ export class AssignmentsController {
     // Mapear la entidad `Assignment` a `AssignmentResponseDto`
     const assignmentsResponse: AssignmentResponseDto = {
       id: assignment.id,
-      projectId: assignment.projectId,
-      staffId: assignment.staffId,
+      project: assignment.project,
+      staff: assignment.staff,
       fecha_asignacion: assignment.fecha_asignacion
     }
     
@@ -70,8 +107,8 @@ export class AssignmentsController {
       // Mapear la entidad `Assignment` a `AssignmentResponseDto`
       const assignmentsResponse: AssignmentResponseDto = {
         id: assignment.id,
-        projectId: assignment.projectId,
-        staffId: assignment.staffId,
+        project: assignment.project,
+        staff: assignment.staff,
         fecha_asignacion: assignment.fecha_asignacion
       }
       
@@ -100,8 +137,8 @@ export class AssignmentsController {
     // Mapear la entidad `Assignment` a `AssignmentResponseDto`
     const assignmentsResponse: AssignmentResponseDto = {
       id: updateAssigment.id,
-      projectId: updateAssigment.projectId,
-      staffId: updateAssigment.staffId,
+      project: updateAssigment.project,
+      staff: updateAssigment.staff,
       fecha_asignacion: updateAssigment.fecha_asignacion
     }
     

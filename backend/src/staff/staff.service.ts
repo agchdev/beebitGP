@@ -6,6 +6,7 @@ import { Project } from 'src/projects/entities/project.entity/project.entity';
 import { StaffResponseDto } from './dto/staff-response.dto';
 import { UpdateStaffDto } from './dto/update-staff.dto';
 import { CreateStaffDto } from './dto/ create-staff.dto';
+
 @Injectable()
 export class StaffService {
   constructor(
@@ -21,6 +22,7 @@ export class StaffService {
       id: staff.id,
       name: staff.name,
       email: staff.email,
+      password: staff.password,
       rol: staff.rol,
     }));
 
@@ -29,9 +31,9 @@ export class StaffService {
   // Obtener miembro solo por ID
   async findOne(id: number): Promise<StaffResponseDto | null> {
     const staff = await this.staffRepository.findOne({ where: { id } });
-
-    if (!staff) throw new NotFoundException(`La tarea con ID ${id} no existe.`);
-
+  
+    if (!staff) throw new NotFoundException(`El miembro del staff con ID ${id} no existe.`);
+  
     return {
       id: staff.id,
       name: staff.name,
@@ -40,10 +42,26 @@ export class StaffService {
     };
   }
 
+  // Obtener miembro solo por usuario y contraseña
+  async validateUser(user: string, password: string): Promise<StaffResponseDto | null> {
+    const staff = await this.staffRepository.findOne({ where: { name: user, password: password } });
+
+    if (!staff) throw new NotFoundException(`La tarea con ID ${user} no existe.`);
+
+    return {
+      id: staff.id,
+      name: staff.name,
+      email: staff.email,
+      rol: staff.rol,
+    };  
+  }
+
   // Crear un nuevo miembro del staff
   async create(createStaffDto: CreateStaffDto): Promise<StaffResponseDto> {
+
     const newStaff = this.staffRepository.create(createStaffDto);
     const savedStaff = await this.staffRepository.save(newStaff);
+    
     return {
       id: savedStaff.id,
       name: savedStaff.name,

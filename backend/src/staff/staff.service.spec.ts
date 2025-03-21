@@ -42,8 +42,8 @@ describe('StaffService', () => { //Define el grupo de pruebas para el servicio d
 
       it('debería obtener todos los miembros del staff', async () => {
         const staffList: Staff[] = [
-          { id: 1, name: 'Juan Pérez', email: 'juan@example.com', rol: 'Desarrollador' },
-          { id: 2, name: 'María López', email: 'maria@example.com', rol: 'Diseñadora' },
+          { id: 1, name: 'Juan Pérez', email: 'juan@example.com', password: 'password123', rol: 'Desarrollador' },
+          { id: 2, name: 'María López', email: 'maria@example.com', password: 'password123', rol: 'Diseñadora' },
         ];
       
         jest.spyOn(repository, 'find').mockResolvedValue(staffList);
@@ -60,7 +60,7 @@ describe('StaffService', () => { //Define el grupo de pruebas para el servicio d
        */
   
       it('debería obtener un miembro del staff por ID', async () => {
-        const staffMember: Staff = { id: 1, name: 'Juan Pérez', email: 'juan@example.com', rol: 'Desarrollador' };
+        const staffMember: Staff = { id: 1, name: 'Juan Pérez', email: 'juan@example.com', password: 'password123', rol: 'Desarrollador' };
       
         jest.spyOn(repository, 'findOne').mockResolvedValue(staffMember);
       
@@ -76,7 +76,7 @@ describe('StaffService', () => { //Define el grupo de pruebas para el servicio d
        */
   
       it('debería crear un nuevo miembro del staff', async () => {
-        const newStaffMember: Staff = { id: 3, name: 'Carlos Gómez', email: 'carlos@example.com', rol: 'Tester' };
+        const newStaffMember: Staff = { id: 3, name: 'Carlos Gómez', email: 'carlos@example.com', password: 'password123', rol: 'Tester' };
       
         jest.spyOn(repository, 'create').mockReturnValue(newStaffMember);
         jest.spyOn(repository, 'save').mockResolvedValue(newStaffMember);
@@ -93,7 +93,7 @@ describe('StaffService', () => { //Define el grupo de pruebas para el servicio d
        */
   
       it('debería actualizar un miembro del staff', async () => {
-        const updatedStaffMember: Staff = { id: 1, name: 'Juan Pérez', email: 'juan@example.com', rol: 'Gerente' };
+        const updatedStaffMember: Staff = { id: 1, name: 'Juan Pérez', email: 'juan@example.com',password: 'password123', rol: 'Gerente' };
       
         jest.spyOn(repository, 'update').mockResolvedValue({ affected: 1 } as UpdateResult);
         jest.spyOn(repository, 'findOne').mockResolvedValue(updatedStaffMember);
@@ -109,7 +109,7 @@ describe('StaffService', () => { //Define el grupo de pruebas para el servicio d
        */
   
       it('debería eliminar un miembro del staff', async () => {
-        const staffMember: Staff = { id: 1, name: 'Juan Pérez', email: 'juan@example.com', rol: 'Desarrollador' };
+        const staffMember: Staff = { id: 1, name: 'Juan Pérez', email: 'juan@example.com',password: 'password123', rol: 'Desarrollador' };
       
         jest.spyOn(repository, 'findOne').mockResolvedValue(staffMember);
         jest.spyOn(repository, 'remove').mockResolvedValue(staffMember as any);

@@ -12,6 +12,11 @@ export class UpdateStaffDto {
   @IsEmail({}, { message: 'El email debe ser válido.' })
   email?: string;
 
+  @ApiProperty({ example: '123456', description: 'Contraseña del staff' })
+  @IsOptional()
+  @IsString()
+  password?: string;
+
   @ApiProperty({ example: 'Desarrollador', description: 'Rol del staff' })
   @IsOptional()
   @IsString()

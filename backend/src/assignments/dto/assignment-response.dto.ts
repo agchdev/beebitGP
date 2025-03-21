@@ -6,11 +6,11 @@ export class AssignmentResponseDto {
     @ApiProperty({ example: 1, description: 'ID único de la asignación' })
     id: number;
 
-    @ApiProperty({ description: 'Proyecto asociado a la asignación', type: Number })
-    projectId: number;
+    @ApiProperty({ description: 'Proyecto asociado a la asignación', type: ProjectResponseDto })
+    project: ProjectResponseDto;
 
-    @ApiProperty({ description: 'Miembro del staff asignado', type: Number })
-    staffId: number;
+    @ApiProperty({ description: 'Miembro del staff asignado', type: StaffResponseDto })
+    staff: StaffResponseDto;
 
     @ApiProperty({ example: '2024-03-20T12:00:00.000Z', description: 'Fecha en que se realizó la asignación' })
     fecha_asignacion: Date;

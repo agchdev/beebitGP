@@ -9,6 +9,8 @@ COPY package.json package-lock.json ./
 
 RUN npm install
 
+RUN apk add --no-cache python3 make g++
+
 COPY . .
 
 RUN npm run build
