@@ -26,14 +26,17 @@ services:
     volumes:
       - ./backend/src:/app/src
   frontend:
-    build: ./frontend
+    container_name: beebit-frontend
+    build:
+      context: ./beebit-frontend
+      dockerfile: Dockerfile
     ports:
       - "3001:3001"
     volumes:
-      - ./frontend:/app
+      - ./beebit-frontend:/app 
       - /app/node_modules
     environment:
-      - NODE_ENV=development
-
+      - PORT=3001
+    command: npm run dev
 volumes:
   beebit_pg_data:
