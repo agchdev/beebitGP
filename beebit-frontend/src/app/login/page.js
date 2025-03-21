@@ -1,11 +1,12 @@
 "use client"; // Necesario porque usamos useState y useRouter
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
     const [user, setUser] = useState("");
     const [password, setPassword] = useState("");
     const [err, setError] = useState("");
+    const [res, setRes] = useState("");
     const router = useRouter();
 
     const handleLogin = async (e) => {
@@ -26,7 +27,8 @@ export default function LoginPage() {
             }
         
             const data = await response.json();
-            router.push(`/profile/${data.data.id}`);
+            setRes(data);
+            router.push(`/profile/${res.data.id}`);
         } catch (error) {
             console.error("Error conectando al backend:", error);
             setError("Error de conexión");
@@ -34,6 +36,10 @@ export default function LoginPage() {
         }
 
     }
+
+    useEffect(() => {
+        console.log(res)
+    }, [res]);
 
 
     return (
